@@ -13,7 +13,8 @@ int main(){
 	echo();
 
 	printMap();
-
+	
+	/* User can input option */
 	scanw("%c",&c);
 
 

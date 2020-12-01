@@ -1,2 +1,6 @@
 # Avoid_Virus_Game
-System Programming Team 5's Project
+System Programming TEAM5's Project
+
+This is the first step of project.
+
+This branch has inital screen function.

@@ -1,39 +1,47 @@
 
 
 #include <stdio.h>
-#include <curses.h>
+#include <ncurses.h>
 
-#define WIDTH  20
+#define WIDTH  40
 #define HEIGHT 30
 
 void printMap();
 
 int main(){
-
-
+	int c;
+	echo();
 
 	printMap();
 
+	scanw("%c",&c);
 
 
-
-
-
-
-
-
+	endwin();
 	return 0;
 }
-
+/* display bottom and player */
 void printMap()
 {
 	initscr();
 
 	int i;
+	/* player */
+	move(HEIGHT-1, WIDTH/2);
+		printw("+");
 
-	move(0, HEIGHT + 1);
+	/* bottom */
+	move(HEIGHT, 0);
 	for (i = 0; i < WIDTH; i++)
-		printf("▤");
+		printw("=");
+	
+	move(HEIGHT + 9,0);
+	printw("Input Option:");
+	move(HEIGHT + 9,15);
+
+	refresh();	
+
+
 }
 
 

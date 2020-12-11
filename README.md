@@ -2,4 +2,7 @@
 
 System Programming Team 5's Project
 
-#What's in
+# How to Play
+
+
+# What's in

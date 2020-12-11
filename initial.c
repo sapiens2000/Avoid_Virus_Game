@@ -37,7 +37,7 @@ void printMap()
 		printw("=");
 	
 	move(HEIGHT + 9,0);
-	printw("Input Option:");
+	printw("Dev Option:");
 	move(HEIGHT + 9,15);
 
 	refresh();	

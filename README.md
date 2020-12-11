@@ -1,3 +1,3 @@
-# What's different
+# What's new
 
 movePlayer function added.

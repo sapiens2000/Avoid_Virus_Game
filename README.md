@@ -1,5 +1,6 @@
 # Avoid_Virus_Game
 
-This is the first step of project.
+System Programming Team 5's Project
 
-This branch includes initial screen functions. 
+Main branch is latest executable source code.
+

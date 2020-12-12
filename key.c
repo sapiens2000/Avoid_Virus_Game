@@ -33,13 +33,14 @@ int main(){
 	/* F1 to Exit */
 	while((key = getch()) != KEY_F(1) ){
 
-		movePlayer();
+		movePlayer(key);
 	}
 	
 
 	endwin();
 	return 0;
 }
+
 void printMap()
 {
 	int i;
@@ -71,14 +72,10 @@ void printMap()
 
 }
 
-void movePlayer(){
-	int key;
-
-	key = getch();
+void movePlayer(int key){
 	
 	move(HEIGHT - 1, p.x);
 	delch();
-
 
 	switch(key){
 

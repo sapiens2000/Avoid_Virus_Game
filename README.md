@@ -1,8 +1,13 @@
 # Avoid_Virus_Game
 
-System Programming Team 5's Project
-
-# How to Play
-
+System Programming Team 5's Project.
 
 # What's in
+
+## Functions
+
+
+## Variables 
+
+
+

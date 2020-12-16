@@ -6,38 +6,29 @@
 #include <unistd.h>
 #include <string.h>
 
-#define WIDTH  30
-#define HEIGHT 20
-#define MALLOC(p, s) \
-	if(!((p) = malloc(s))) {\
-		fprintf(stderr, "Insufficient memory"); \
-		exit(EXIT_FAILURE); \
-	}
+#define WIDTH	30
+#define HEIGHT	20
+#define MAX	50
 
 typedef struct _virus {
 	char c[2];
 	int v_x, v_y;
 } virus_t;
-virus_t* queue;
+virus_t virus_set[MAX];
 
-int capacity = 16;
-int front = 0;
-int rear = 0;
-int p_x = WIDTH / 2;
-int p_y = HEIGHT - 1 ;
-int exit_flag = 0;
+int rear = 0;			// number of current virus
+int p_x = WIDTH / 2;		// player x position
+int p_y = HEIGHT - 1 ;		// player y position
+int exit_flag = 0;		// check for exit
 
 void drawMap();
 void drawPlayer(int);
 void drawVirus(int);
 void virusMaking(int);
-void addq(virus_t);
-void deleteq();
-void queueFull();
-void copy(virus_t*, virus_t*, virus_t*);
 
 int main() {
-	int ch, cnt;
+	int ch;	// for user input
+	int cnt;	// for adjust speed for drawVirus() and virusMaking()
 				
 	srand(time(NULL));
 	initscr();
@@ -46,15 +37,11 @@ int main() {
 	keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
 
-	MALLOC(queue, capacity * sizeof(*queue));
-
 	while (1) {
 		ch = getch();
 		
-		if (ch == KEY_F(1)) {
-			exit_flag = 1;
+		if (ch == KEY_F(1) || exit_flag == 1)
 			break;
-		}
 		
 		erase();
 		drawMap();
@@ -66,7 +53,6 @@ int main() {
 	}
 	
 	curs_set(1);
-	free(queue);
 	endwin();
 	return 0;
 }
@@ -109,33 +95,39 @@ void drawMap() {
 void drawVirus(int cnt) {
 	int i;
 	
-	if (rear != front) {
-		for (i = front + 1; i <= rear; i++) {
-			mvaddstr(queue[i].v_y, queue[i].v_x, queue[i].c);
-			if (cnt == 0) {
-				queue[i].v_y++;
-				if(queue[i].v_y > HEIGHT - 1) {
-					queue[i].v_x = (rand() % (WIDTH - 1)) + 1;
-					queue[i].v_y = 1;
-				}
+	if (rear == 0) return;
+	
+	for (i = 1; i <= rear; i++) {
+		mvaddstr(virus_set[i].v_y, virus_set[i].v_x, virus_set[i].c);	// draw virus
+		
+		if (cnt == 0) {
+			virus_set[i].v_y++;	// increase virus y value
+			
+			// game-over condition
+			if (p_x == virus_set[i].v_x && p_y == virus_set[i].v_y) {
+				exit_flag = 1;
+			}
+			
+			// virus reset condition
+			if (virus_set[i].v_y > HEIGHT - 1) {
+				virus_set[i].v_x = (rand() % (WIDTH - 1)) + 1;
+				virus_set[i].v_y = 1;
 			}
 		}
+	}
+	
+	if(exit_flag) {
+		move(10, 10);
+		printw("Game Over");
+		nodelay(stdscr, FALSE);
 	}
 }
 
 void virusMaking(int cnt) {
-	virus_t new;
-	
-	if( cnt == 2500 && (abs(front - rear) < 15)) {
-		strcpy(new.c, "#");
-		new.v_x = (rand() % (WIDTH - 1)) + 1;
-		new.v_y = 1;
-		addq(new);
+	if( cnt == 2500 && rear < 30) {
+		rear++;
+		strcpy(virus_set[rear].c, "#");
+		virus_set[rear].v_x = (rand() % (WIDTH - 1)) + 1;
+		virus_set[rear].v_y = 1;
 	}	
-}
-
-
-void addq(virus_t item) {
-	rear = (rear + 1) % capacity;		
-	queue[rear] = item;
 }

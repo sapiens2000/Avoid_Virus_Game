@@ -4,7 +4,6 @@
 #include <time.h>
 #include <signal.h>
 #include <unistd.h>
-#include <pthread.h>
 #include <string.h>
 
 #define WIDTH  30
@@ -30,16 +29,15 @@ int exit_flag = 0;
 
 void drawMap();
 void drawPlayer(int);
-void drawVirus();
-void *virusMaking(void*);
+void drawVirus(int);
+void virusMaking(int);
 void addq(virus_t);
 void deleteq();
 void queueFull();
 void copy(virus_t*, virus_t*, virus_t*);
 
 int main() {
-	pthread_t t1;
-	int ch;
+	int ch, cnt;
 				
 	srand(time(NULL));
 	initscr();
@@ -49,8 +47,7 @@ int main() {
 	nodelay(stdscr, TRUE);
 
 	MALLOC(queue, capacity * sizeof(*queue));
-	pthread_create(&t1, NULL, virusMaking, NULL);
-	
+
 	while (1) {
 		ch = getch();
 		
@@ -60,13 +57,13 @@ int main() {
 		}
 		
 		erase();
-		
 		drawMap();
 		drawPlayer(ch);
+		virusMaking(cnt);
+		drawVirus(cnt);
 		refresh();
+		cnt = (cnt + 1) % 5000;
 	}
-	
-	pthread_join(t1, NULL);
 	
 	curs_set(1);
 	free(queue);
@@ -109,87 +106,36 @@ void drawMap() {
 	}
 }
 
-void drawVirus() {
+void drawVirus(int cnt) {
 	int i;
 	
 	if (rear != front) {
 		for (i = front + 1; i <= rear; i++) {
-			move(queue[i].v_y, queue[i].v_x);
-			addstr(" ");
-			queue[i].v_y++;
-			move(queue[i].v_y, queue[i].v_x);
-			addstr(queue[i].c);
-			refresh();
+			mvaddstr(queue[i].v_y, queue[i].v_x, queue[i].c);
+			if (cnt == 0) {
+				queue[i].v_y++;
+				if(queue[i].v_y > HEIGHT - 1) {
+					queue[i].v_x = (rand() % (WIDTH - 1)) + 1;
+					queue[i].v_y = 1;
+				}
+			}
 		}
 	}
 }
 
-void *virusMaking(void *none) {
+void virusMaking(int cnt) {
 	virus_t new;
 	
-	while (1) {
-		if (exit_flag == 1) {
-			free(queue);
-			curs_set(1);
-			endwin();
-			exit(1);
-		}
-
+	if( cnt == 2500 && (abs(front - rear) < 15)) {
 		strcpy(new.c, "#");
 		new.v_x = (rand() % (WIDTH - 1)) + 1;
 		new.v_y = 1;
 		addq(new);
-		drawVirus();
-		sleep(rand() % 3);
-	}
+	}	
 }
 
 
 void addq(virus_t item) {
-	rear = (rear + 1) % capacity;
-	if (front == rear);
-		queueFull();
+	rear = (rear + 1) % capacity;		
 	queue[rear] = item;
-}
-
-void deleteq() {
-	if( front == rear) {
-		fprintf(stderr, "deleteq error");
-		exit(EXIT_FAILURE);
-	}
-		
-	front = (front + 1) % capacity;
-}
-
-void queueFull() {
-	int start;
-	virus_t* newQueue;
-
-	MALLOC(newQueue, 2 * capacity * sizeof(*queue));
-	
-	start = (front + 1) % capacity;
-	rear--;
-	
-	if (start < 2)
-		copy(queue + start, queue + start + capacity - 1, newQueue);
-	else {
-		copy(queue + start, queue + capacity, newQueue);
-		copy(queue, queue + rear + 1, newQueue + capacity - start);
-	}
-
-	front = 2 * capacity - 1;
-	rear = capacity - 1;
-	capacity *= 2;
-	
-	free(queue);
-	
-	queue = newQueue;
-}
-
-void copy(virus_t* start, virus_t* end, virus_t* newQueue) {
-	int i;
-	
-	
-	for (i = 0; i < end - start; i++)
-		newQueue[i] = start[i];
 }

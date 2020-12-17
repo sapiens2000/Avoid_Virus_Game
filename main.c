@@ -97,18 +97,18 @@ void drawPlayer(int ch) {
 			p_speed = 3;
 
 		p_x -= p_speed;
-
+		
 		if (p_x < 1) {
 			p_x = 1;
 		}
 	}
-
+	
 	if (ch == KEY_RIGHT || ch == KEY_SRIGHT) {
 		if(ch == KEY_SRIGHT)
 			p_speed = 3;
-
+	
 		p_x += p_speed;
-
+		
 		if (p_x > WIDTH - 1) {
 			p_x = WIDTH - 1;
 		}

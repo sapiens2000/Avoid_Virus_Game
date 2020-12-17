@@ -1,4 +1,4 @@
-# Avoid_Virus_Game
+# Avoid Virus Game
 
 ## 1. 개요
 

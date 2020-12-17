@@ -27,11 +27,14 @@ void drawMap();
 void drawPlayer(int);
 void drawVirus(int);
 void virusMaking(int);
+void gameover();
 
 int main() {
 	int ch;		// for user input
 	int cnt;		// for adjust speed for drawVirus() and virusMaking()
-		
+	
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	srand(time(NULL));
 	initscr();
 	noecho();
@@ -171,15 +174,7 @@ void drawVirus(int cnt) {
 	}
 	
 	if (exit_flag) {
-		move(9, 11);
-		attron(A_BLINK);
-		printw("GAME OVER");
-		move(11, 8);
-		printw("YOUR SCORE IS %d", score - 1);
-		attroff(A_BLINK);
-		move(HEIGHT + 3, 12);
-		printw("                     ");
-		nodelay(stdscr, FALSE);
+		gameover();
 	}
 }
 
@@ -190,4 +185,16 @@ void virusMaking(int cnt) {
 		virus_set[rear].v_x = (rand() % (WIDTH - 1)) + 1;
 		virus_set[rear].v_y = 1;
 	}	
+}
+
+void gameover() {
+	move(HEIGHT + 3, 12);
+	printw("                     ");
+	move(9, 11);
+	attron(A_BLINK);
+	printw("GAME OVER");
+	move(11, 8);
+	printw("YOUR SCORE IS %d", score - 1);
+	attroff(A_BLINK);
+	nodelay(stdscr, FALSE);
 }

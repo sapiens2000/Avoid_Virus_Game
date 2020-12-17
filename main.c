@@ -20,6 +20,7 @@ int rear = 0;			// number of current virus
 int p_x = WIDTH / 2;		// player x position
 int p_y = HEIGHT - 1 ;		// player y position
 int exit_flag = 0;		// check for exit
+int num = 0;
 
 
 void drawTitle();
@@ -121,6 +122,9 @@ void drawPlayer(int ch) {
 void drawMap() {
 	int i;
 	
+	move(HEIGHT + 3, 0);
+	printw("SCORE: %d", num);
+	
 	for (i = 0; i <= WIDTH; i++) {
 		move(0, i);
 		printw("=");		
@@ -146,6 +150,10 @@ void drawVirus(int cnt) {
 		
 		if (cnt == 0) {
 			virus_set[i].v_y++;	// increase virus y value
+			
+			// if player avoid virus, score++
+			if (virus_set[i].v_y == HEIGHT - 1)
+				num++;
 			
 			// game-over condition
 			if (p_x == virus_set[i].v_x && p_y == virus_set[i].v_y) {

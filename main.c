@@ -21,6 +21,8 @@ int p_x = WIDTH / 2;		// player x position
 int p_y = HEIGHT - 1 ;		// player y position
 int exit_flag = 0;		// check for exit
 
+
+void drawTitle();
 void drawMap();
 void drawPlayer(int);
 void drawVirus(int);
@@ -36,7 +38,9 @@ int main() {
 	curs_set(0);
 	keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
-
+	
+	drawTitle();
+	
 	while (1) {
 		ch = getch();
 		
@@ -57,13 +61,41 @@ int main() {
 	return 0;
 }
 
+void drawTitle(){
+	int input;
+
+	erase();
+	move(2,0);
+	
+	printw("    #    #   #   ###   ###  ### \n");
+	printw("   # #   #   #  #   #   #   #  #\n");
+	printw("  #####  #   #  #   #   #   #  #\n");
+	printw("  #   #   # #   #   #   #   #  #\n");
+	printw("  #   #    #     ###   ###  ### \n\n");
+
+	printw("      #   #  ###  ###   #  #  ####\n");
+	printw("      #   #   #   #  #  #  #  #   \n");
+	printw("      #   #   #   ###   #  #  ####\n");
+	printw("       # #    #   #  #  #  #     #\n");
+	printw("        #    ###  #  #   ##   ####\n\n\n");
+
+	printw("           Use Arrow Keys!\n\n\n");	
+	attron(A_BLINK);
+	printw("           Press Any Key.              ");
+	refresh();	
+	attroff(A_BLINK);
+	
+	/* discard input */
+	input = getchar();
+}
+
 void drawPlayer(int ch) {
 	int p_speed = 1;
 
 	if (ch == KEY_LEFT || ch == KEY_SLEFT) {
 		if (ch == KEY_SLEFT)
 			p_speed = 3;
-		
+
 		p_x -= p_speed;
 		
 		if (p_x < 1) {
@@ -81,7 +113,7 @@ void drawPlayer(int ch) {
 			p_x = WIDTH - 1;
 		}
 	}
-	
+
 	move(p_y, p_x);
 	printw("0");
 }

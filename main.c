@@ -20,19 +20,21 @@ int rear = 0;			// number of current virus
 int p_x = WIDTH / 2;		// player x position
 int p_y = HEIGHT - 1 ;		// player y position
 int exit_flag = 0;		// check for exit
-int num = 0;
-
+int score = 0;			// check for score
 
 void drawTitle();
 void drawMap();
 void drawPlayer(int);
 void drawVirus(int);
 void virusMaking(int);
+void gameover();
 
 int main() {
-	int ch;	// for user input
-	int cnt;	// for adjust speed for drawVirus() and virusMaking()
-				
+	int ch;		// for user input
+	int cnt;		// for adjust speed for drawVirus() and virusMaking()
+	
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	srand(time(NULL));
 	initscr();
 	noecho();
@@ -80,11 +82,11 @@ void drawTitle(){
 	printw("       # #    #   #  #  #  #     #\n");
 	printw("        #    ###  #  #   ##   ####\n\n\n");
 
-	printw("           Use Arrow Keys!\n\n\n");	
+	printw("           Use Arrow Keys!\n\n\n");
 	attron(A_BLINK);
-	printw("           Press Any Key.              ");
-	refresh();	
+	printw("            Press Any Key              \n\n\n\n");
 	attroff(A_BLINK);
+	refresh();	
 	
 	/* discard input */
 	input = getchar();
@@ -122,8 +124,8 @@ void drawPlayer(int ch) {
 void drawMap() {
 	int i;
 	
-	move(HEIGHT + 3, 0);
-	printw("SCORE: %d", num);
+	move(HEIGHT + 3, 12);
+	printw("SCORE: %d", score);
 	
 	for (i = 0; i <= WIDTH; i++) {
 		move(0, i);
@@ -146,14 +148,17 @@ void drawVirus(int cnt) {
 	if (rear == 0) return;
 	
 	for (i = 1; i <= rear; i++) {
-		mvaddstr(virus_set[i].v_y, virus_set[i].v_x, virus_set[i].c);	// draw virus
+		// draw virus
+		mvaddstr(virus_set[i].v_y, virus_set[i].v_x, virus_set[i].c);
 		
 		if (cnt == 0) {
-			virus_set[i].v_y++;	// increase virus y value
+			// increase virus y value
+			virus_set[i].v_y++;
 			
 			// if player avoid virus, score++
 			if (virus_set[i].v_y == HEIGHT - 1)
-				num++;
+				score++;
+
 			
 			// game-over condition
 			if (p_x == virus_set[i].v_x && p_y == virus_set[i].v_y) {
@@ -168,10 +173,8 @@ void drawVirus(int cnt) {
 		}
 	}
 	
-	if(exit_flag) {
-		move(10, 10);
-		printw("Game Over");
-		nodelay(stdscr, FALSE);
+	if (exit_flag) {
+		gameover();
 	}
 }
 
@@ -182,4 +185,16 @@ void virusMaking(int cnt) {
 		virus_set[rear].v_x = (rand() % (WIDTH - 1)) + 1;
 		virus_set[rear].v_y = 1;
 	}	
+}
+
+void gameover() {
+	move(HEIGHT + 3, 12);
+	printw("                     ");
+	move(9, 11);
+	attron(A_BLINK);
+	printw("GAME OVER");
+	move(11, 8);
+	printw("YOUR SCORE IS %d", score - 1);
+	attroff(A_BLINK);
+	nodelay(stdscr, FALSE);
 }

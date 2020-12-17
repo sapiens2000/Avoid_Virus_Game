@@ -28,6 +28,8 @@ $ cc main.c -lncurses -o main
 
 - 게임이 시작된 모습입니다. 키보드 방향키를 사용하여 플레이어를 좌우로 움직일 수 있습니다.
 
+- 좌하단 score 는 내 점수로, 플레이한 시간에 따라 증가합니다. 
+
 *****************************
 
 ### 3. 게임오버
@@ -35,4 +37,6 @@ $ cc main.c -lncurses -o main
 ![gameover](https://user-images.githubusercontent.com/33113480/102458017-f8450400-4086-11eb-8223-a0f00e6c8fe7.JPG)
 
 - 플레이어가 바이러스와 닿으면 Game Over 메세지가 나오며 게임이 종료됩니다.
+
+- 좌화단 score 부분에서 자신의 최종 점수를 확인할 수 있습니다.
 

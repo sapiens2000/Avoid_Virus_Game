@@ -57,16 +57,28 @@ int main() {
 	return 0;
 }
 
-void drawPlayer(int ch) {	
-	if (ch == KEY_LEFT) {
-		if (p_x > 1) {
-			p_x--;
+void drawPlayer(int ch) {
+	int p_speed = 1;
+
+	if (ch == KEY_LEFT || ch == KEY_SLEFT) {
+		if (ch == KEY_SLEFT)
+			p_speed = 3;
+		
+		p_x -= p_speed;
+		
+		if (p_x < 1) {
+			p_x = 1;
 		}
 	}
 	
-	if (ch == KEY_RIGHT) {
-		if (p_x < WIDTH - 1) {
-			p_x++;
+	if (ch == KEY_RIGHT || ch == KEY_SRIGHT) {
+		if(ch == KEY_SRIGHT)
+			p_speed = 3;
+	
+		p_x += p_speed;
+		
+		if (p_x > WIDTH - 1) {
+			p_x = WIDTH - 1;
 		}
 	}
 	

@@ -21,7 +21,6 @@ int p_x = WIDTH / 2;		// player x position
 int p_y = HEIGHT - 1 ;		// player y position
 int exit_flag = 0;		// check for exit
 int score = 0;			// check for score
-int difficulty = 5000;		// for game's difficulty
 
 void drawTitle();
 void drawMap();
@@ -54,7 +53,7 @@ int main() {
 		virusMaking(cnt);
 		drawVirus(cnt);
 		refresh();
-		cnt = (cnt + 1) % difficulty;
+		cnt = (cnt + 1) % 5000;
 	}
 	
 	curs_set(1);
@@ -154,10 +153,8 @@ void drawVirus(int cnt) {
 			virus_set[i].v_y++;
 			
 			// if player avoid virus, score++
-			if (virus_set[i].v_y == HEIGHT - 1) {
+			if (virus_set[i].v_y == HEIGHT - 1)
 				score++;
-				if (score > 100) difficulty = 3000;
-			}
 
 			
 			// game-over condition

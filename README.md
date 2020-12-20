@@ -40,3 +40,7 @@ $ cc main.c -lncurses -o main
 - 플레이어가 바이러스와 닿게되면 게임을 종료합니다.
 
 - GAME OVER 메세지와 획득한 점수를 출력합니다.
+
+### 4. 발표 / 데모 동영상
+
+[![발표](https://i9.ytimg.com/vi/uwiNG2lNnN0/mq1.jpg?sqp=CJyk-_4F&rs=AOn4CLAfq39XkNST_Z3JXjiJKMJhwi_sPw)](https://youtu.be/uwiNG2lNnN0)
